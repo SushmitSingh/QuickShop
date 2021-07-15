@@ -1,0 +1,863 @@
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n    dependencies {\r\n\r\n        classpath \"com.android.tools.build:gradle:4.1.2\"\r\n        classpath 'com.google.gms:google-services:4.3.5'\r\n\r\n\r\n        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ build.gradle	(date 1626187765676)
+@@ -3,11 +3,12 @@
+     repositories {
+         google()
+         jcenter()
++        mavenCentral()
+     }
+     dependencies {
+ 
+         classpath "com.android.tools.build:gradle:4.1.2"
+-        classpath 'com.google.gms:google-services:4.3.5'
++        classpath 'com.google.gms:google-services:4.3.8'
+ 
+ 
+         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
+@@ -20,6 +21,7 @@
+     repositories {
+         google()
+         jcenter()
++        mavenCentral()
+     }
+ }
+ 
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n    id 'com.google.gms.google-services'\r\n}\r\napply plugin: 'com.jakewharton.butterknife'\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.3\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.quickshop\"\r\n        minSdkVersion 22\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'com.google.android.material:material:1.3.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'\r\n    implementation 'com.google.firebase:firebase-auth:20.0.3'\r\n    testImplementation 'junit:junit:4.+'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.2'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'\r\n\r\n    //ButterKnife\r\n    implementation 'com.jakewharton:butterknife:10.2.3'\r\n    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/build.gradle	(date 1626187731647)
+@@ -7,6 +7,10 @@
+     compileSdkVersion 30
+     buildToolsVersion "30.0.3"
+ 
++    buildFeatures {
++        viewBinding = true
++    }
++
+     defaultConfig {
+         applicationId "com.example.quickshop"
+         minSdkVersion 22
+@@ -35,12 +39,22 @@
+     implementation 'com.google.android.material:material:1.3.0'
+     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+     implementation 'com.google.firebase:firebase-auth:20.0.3'
++    implementation 'com.google.firebase:firebase-firestore:22.1.2'
++    implementation 'com.google.firebase:firebase-storage:20.0.0'
++    implementation 'com.google.firebase:firebase-database:20.0.0'
+     testImplementation 'junit:junit:4.+'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+ 
+-    //ButterKnife
+-    implementation 'com.jakewharton:butterknife:10.2.3'
+-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
++    // Import the BoM for the Firebase platform
++    implementation platform('com.google.firebase:firebase-bom:28.2.1')
++
++    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
++
++    implementation 'com.github.bumptech.glide:glide:4.12.0'
++    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
++
++    implementation 'com.razorpay:checkout:1.6.6'
++
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_user_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/all_background\"\r\n    tools:context=\".UserProfile\">\r\n\r\n    <Button\r\n        android:id=\"@+id/logOut\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"36dp\"\r\n        android:background=\"@drawable/sgbase\"\r\n        android:text=\"LogOut\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:textSize=\"10dp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/Profile\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/Profile\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"36dp\"\r\n        android:background=\"@drawable/sgbase\"\r\n        android:text=\"Profile\"\r\n        android:textColor=\"#FFFFFF\"\r\n        android:textSize=\"10dp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/logOut\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_user_profile.xml	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/res/layout/activity_user_profile.xml	(date 1626188663155)
+@@ -8,28 +8,154 @@
+     tools:context=".UserProfile">
+ 
+     <Button
+-        android:id="@+id/logOut"
+-        android:layout_width="0dp"
+-        android:layout_height="36dp"
+-        android:background="@drawable/sgbase"
+-        android:text="LogOut"
+-        android:textColor="#FFFFFF"
+-        android:textSize="10dp"
++        android:id="@+id/logo3"
++        android:layout_width="73dp"
++        android:layout_height="71dp"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="25dp"
++        android:layout_marginEnd="30dp"
++        android:layout_marginBottom="47dp"
++        android:background="@drawable/mainlogoround"
++        android:clickable="false"
++        android:textAlignment="center"
++        android:textAllCaps="false"
++        android:textSize="19sp"
+         android:textStyle="bold"
++        app:cornerRadius="1000sp"
+         app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toEndOf="@+id/Profile"
++        app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+ 
+-    <Button
+-        android:id="@+id/Profile"
++    <TextView
++        android:id="@+id/userPhone"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="14dp"
++        android:layout_marginEnd="30dp"
++        android:backgroundTint="#000000"
++        android:ems="10"
++        android:fontFamily="@font/archivo_black"
++        android:hint="Your Mobile Number"
++        android:inputType="numberSigned"
++        android:textAlignment="center"
++        app:layout_constraintBottom_toTopOf="@+id/userName"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/textView6" />
++
++    <EditText
++        android:id="@+id/userName"
+         android:layout_width="0dp"
+-        android:layout_height="36dp"
+-        android:background="@drawable/sgbase"
+-        android:text="Profile"
+-        android:textColor="#FFFFFF"
+-        android:textSize="10dp"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="12dp"
++        android:layout_marginEnd="30dp"
++        android:backgroundTint="#000000"
++        android:ems="10"
++        android:fontFamily="@font/archivo_black"
++        android:hint="Your Name"
++        android:inputType="textPersonName"
++        android:textAlignment="viewStart"
++        app:layout_constraintBottom_toTopOf="@+id/Emailadd"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/userPhone" />
++
++    <EditText
++        android:id="@+id/Emailadd"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="12dp"
++        android:layout_marginEnd="30dp"
++        android:backgroundTint="#000000"
++        android:ems="10"
++        android:fontFamily="@font/archivo_black"
++        android:hint="Enter Your Email "
++        android:inputType="textEmailAddress"
++        android:textAlignment="viewStart"
++        app:layout_constraintBottom_toTopOf="@+id/Address"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/userName" />
++
++    <EditText
++        android:id="@+id/Address"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="12dp"
++        android:layout_marginEnd="50dp"
++        android:layout_marginBottom="20dp"
++        android:backgroundTint="#000000"
++        android:editable="false"
++        android:ems="10"
++        android:fontFamily="@font/arbutus"
++        android:freezesText="false"
++        android:hint="Enter Your Address"
++        android:inputType="textUri|textShortMessage|textMultiLine"
++        android:textAlignment="textStart"
++        app:layout_constraintBottom_toTopOf="@+id/saveprofile"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/Emailadd"
++        app:layout_constraintVertical_bias="0.0" />
++
++    <TextView
++        android:id="@+id/textView6"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="28dp"
++        android:layout_marginEnd="30dp"
++        android:fontFamily="@font/archivo_black"
++        android:text=" Manage Your Profile"
++        android:textAlignment="center"
++        android:textColor="#E1000000"
++        android:textColorHighlight="#000000"
++        android:textColorHint="#000000"
++        android:textColorLink="#000000"
++        android:textSize="22dp"
++        app:layout_constraintBottom_toTopOf="@+id/userPhone"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/logo3"
++        app:layout_constraintVertical_bias="1.0" />
++
++    <Button
++        android:id="@+id/saveprofile"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="40dp"
++        android:layout_marginTop="20dp"
++        android:layout_marginEnd="40dp"
++        android:backgroundTint="#FFFFFF"
++        android:text="Save"
++        android:textColor="#000000"
++        android:textSize="20dp"
+         android:textStyle="bold"
+-        app:layout_constraintEnd_toStartOf="@+id/logOut"
++        app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
++        app:layout_constraintTop_toBottomOf="@+id/Address" />
++
++    <TextView
++        android:id="@+id/skip"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="8dp"
++        android:layout_marginEnd="36dp"
++        android:fontFamily="@font/archivo_black"
++        android:text="Skip Now"
++        android:textColor="#000000"
++        android:textSize="20dp"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="1.0"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/saveprofile" />
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Quick Shop</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/res/values/strings.xml	(date 1626043117569)
+@@ -1,3 +1,5 @@
+ <resources>
+     <string name="app_name">Quick Shop</string>
++    <string name="profile">Profile</string>
++    <string name="cart">Cart</string>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/java/com/example/quickshop/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.quickshop;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n         getSupportActionBar().hide();\r\n        new Handler().postDelayed(() -> {\r\n            // This method will be executed once the timer is over\r\n            Intent i = new Intent(MainActivity.this, LoginSignup.class);\r\n            startActivity(i);\r\n            finish();\r\n        }, 1500);\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/quickshop/MainActivity.java	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/java/com/example/quickshop/MainActivity.java	(date 1626030782017)
+@@ -5,13 +5,18 @@
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.os.Handler;
++import android.view.View;
++
++import com.example.quickshop.databinding.ActivityMainBinding;
+ 
+ public class MainActivity extends AppCompatActivity {
+-
++    private ActivityMainBinding binding;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_main);
++        binding = ActivityMainBinding.inflate(getLayoutInflater());
++        View view = binding.getRoot();
++        setContentView(view);
+          getSupportActionBar().hide();
+         new Handler().postDelayed(() -> {
+             // This method will be executed once the timer is over
+Index: app/src/main/java/com/example/quickshop/LoginSignup.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.quickshop;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.constraintlayout.widget.ConstraintLayout;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.firebase.FirebaseException;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.PhoneAuthCredential;\r\nimport com.google.firebase.auth.PhoneAuthOptions;\r\nimport com.google.firebase.auth.PhoneAuthProvider;\r\n\r\nimport java.util.concurrent.TimeUnit;\r\n\r\nimport butterknife.BindView;\r\nimport butterknife.BindViews;\r\n\r\npublic class LoginSignup extends AppCompatActivity {\r\n\r\n//    @BindViews({R.id.loginBtn,R.id.SignUpBtn,R.id.sendOtp,R.id.VerifyOtp,R.id.resend}) private Button loginBtn,signUpbtn,sentOtp,verifyOtpBtn,resendOtpBtn;\r\n//    @BindViews({R.id.countryCode,R.id.countryCode,R.id.phoneNumber,R.id.otpText}) private EditText cCode,number,otpText;\r\n//    @BindView(R.id.withGoogle) private TextView signInWithGoogle;\r\n//    @BindViews({R.id.SignUpLogin,R.id.EnterNumberForOtp,R.id.vrifyOtp}) private ConstraintLayout loginAndSignUp,sendOtpLayout,otpVerifyLayout;\r\n\r\n    private Button loginBtn,signUpbtn,sentOtp,verifyOtpBtn,resendOtpBtn;\r\n    private EditText cCode,number,otpText;\r\n    private TextView signInWithGoogle;\r\n    private ConstraintLayout loginAndSignUp,sendOtpLayout,otpVerifyLayout;\r\n    private PhoneAuthProvider.ForceResendingToken token;\r\n    private FirebaseAuth fAuth;\r\n    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;\r\n    private  String userPhoneNumber,verificationId;\r\n    private long pressedTime;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login_signup);\r\n        getSupportActionBar().hide();\r\n\r\n        loginBtn = findViewById(R.id.loginBtn);\r\n        signUpbtn =findViewById(R.id.SignUpBtn);\r\n        sentOtp = findViewById(R.id.sendOtp);\r\n        cCode = findViewById(R.id.countryCode);\r\n        number= findViewById(R.id.phoneNumber);\r\n        signInWithGoogle = findViewById(R.id.withGoogle);\r\n        loginAndSignUp = findViewById(R.id.SignUpLogin);\r\n        sendOtpLayout = findViewById(R.id.EnterNumberForOtp);\r\n        otpVerifyLayout = findViewById(R.id.VerifyOtp);\r\n        verifyOtpBtn = findViewById(R.id.vrifyOtp);\r\n        resendOtpBtn = findViewById(R.id.resend);\r\n        otpText = findViewById(R.id.otpText);\r\n\r\n        fAuth = FirebaseAuth.getInstance();\r\n\r\n        loginBtn.setOnClickListener(new View.OnClickListener() {\r\n\r\n            @Override\r\n            public void onClick(View v) {\r\n                loginAndSignUp.setVisibility(View.GONE);\r\n                sendOtpLayout.setVisibility(View.VISIBLE);\r\n                otpVerifyLayout.setVisibility(View.GONE);\r\n                loginAndSignUp.setVisibility(View.GONE);\r\n                sendOtpLayout.setVisibility(View.VISIBLE);\r\n            }\r\n        });\r\n\r\n        signUpbtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                loginAndSignUp.setVisibility(View.GONE);\r\n                sendOtpLayout.setVisibility(View.VISIBLE);\r\n                otpVerifyLayout.setVisibility(View.GONE);\r\n                loginAndSignUp.setVisibility(View.GONE);\r\n                sendOtpLayout.setVisibility(View.VISIBLE);\r\n            }\r\n        });\r\n\r\n        sentOtp.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(cCode.getText().toString().isEmpty()){\r\n                    cCode.setError(\"Country Code Is Required\");\r\n                    return;\r\n                }\r\n                if(number.getText().toString().isEmpty()){\r\n                    number.setError(\"Phone Number Is Required\");\r\n                    return;\r\n                }\r\n                userPhoneNumber = cCode.getText().toString()+number.getText().toString();\r\n                Toast.makeText(LoginSignup.this,\"\"+cCode.getText().toString()+number.getText().toString(),Toast.LENGTH_SHORT).show();\r\n                verifyPhoneNumber(userPhoneNumber);\r\n                otpVerifyLayout.setVisibility(View.VISIBLE);\r\n                loginAndSignUp.setVisibility(View.GONE);\r\n                sendOtpLayout.setVisibility(View.GONE);\r\n\r\n            }\r\n        });\r\n        resendOtpBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                verifyPhoneNumber(userPhoneNumber);\r\n                resendOtpBtn.setEnabled(false);\r\n            }\r\n        });\r\n        verifyOtpBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(otpText.getText().toString().isEmpty()){\r\n                    otpText.setError(\"Enter Otp First\");\r\n                    return;\r\n                }\r\n                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId,otpText.getText().toString());\r\n                authenticateUser(credential);\r\n\r\n            }\r\n        });\r\n        callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {\r\n            @Override\r\n            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {\r\n                authenticateUser(phoneAuthCredential);\r\n\r\n            }\r\n            @Override\r\n            public void onVerificationFailed(@NonNull FirebaseException e) {\r\n                Toast.makeText(LoginSignup.this, e.getMessage(), Toast.LENGTH_SHORT).show();\r\n            }\r\n            @Override\r\n            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {\r\n                super.onCodeSent(s, forceResendingToken);\r\n                verificationId = s;\r\n                token = forceResendingToken;\r\n                resendOtpBtn.setEnabled(false);\r\n            }\r\n            @Override\r\n            public void onCodeAutoRetrievalTimeOut(@NonNull String s) {\r\n                super.onCodeAutoRetrievalTimeOut(s);\r\n                resendOtpBtn.setEnabled(true);\r\n\r\n            }\r\n        };\r\n\r\n\r\n        }\r\n    public void verifyPhoneNumber(String phoneNumber){\r\n        PhoneAuthOptions options =\r\n                PhoneAuthOptions.newBuilder(fAuth)\r\n                        .setPhoneNumber(phoneNumber)       // Phone number to verify\r\n                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit\r\n                        .setActivity(this)                 // Activity (for callback binding)\r\n                        .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks\r\n                        .build();\r\n        PhoneAuthProvider.verifyPhoneNumber(options);\r\n\r\n    }\r\n\r\n    public void authenticateUser(PhoneAuthCredential credential){\r\n        fAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {\r\n            @Override\r\n            public void onSuccess(AuthResult authResult) {\r\n                Toast.makeText(LoginSignup.this, \"Success\", Toast.LENGTH_SHORT).show();\r\n                startActivity(new Intent(getApplicationContext(),MainActivity.class));\r\n                finish();\r\n            }\r\n        }).addOnFailureListener(new OnFailureListener() {\r\n            @Override\r\n            public void onFailure(@NonNull Exception e) {\r\n                Toast.makeText(LoginSignup.this, e.getMessage(), Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n    }\r\n    @Override\r\n    protected void onStart() {\r\n        super.onStart();\r\n        if(FirebaseAuth.getInstance().getCurrentUser() !=null)\r\n        {\r\n            startActivity(new Intent(getApplicationContext(),UserProfile.class));\r\n            finish();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed() {\r\n\r\n        if( pressedTime + 2000 > System.currentTimeMillis()) {\r\n            super.onBackPressed();\r\n            finish();\r\n        }\r\n        else {\r\n\r\n            Toast.makeText(getBaseContext(), \"Press back again to exit\", Toast.LENGTH_SHORT).show();\r\n                super.onBackPressed();\r\n        }\r\n        pressedTime = System.currentTimeMillis();\r\n\r\n\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/quickshop/LoginSignup.java	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/java/com/example/quickshop/LoginSignup.java	(date 1626086887231)
+@@ -9,7 +9,6 @@
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+-import android.widget.TextView;
+ import android.widget.Toast;
+ 
+ import com.google.android.gms.tasks.OnFailureListener;
+@@ -22,10 +21,6 @@
+ import com.google.firebase.auth.PhoneAuthProvider;
+ 
+ import java.util.concurrent.TimeUnit;
+-
+-import butterknife.BindView;
+-import butterknife.BindViews;
+-
+ public class LoginSignup extends AppCompatActivity {
+ 
+ //    @BindViews({R.id.loginBtn,R.id.SignUpBtn,R.id.sendOtp,R.id.VerifyOtp,R.id.resend}) private Button loginBtn,signUpbtn,sentOtp,verifyOtpBtn,resendOtpBtn;
+@@ -33,9 +28,8 @@
+ //    @BindView(R.id.withGoogle) private TextView signInWithGoogle;
+ //    @BindViews({R.id.SignUpLogin,R.id.EnterNumberForOtp,R.id.vrifyOtp}) private ConstraintLayout loginAndSignUp,sendOtpLayout,otpVerifyLayout;
+ 
+-    private Button loginBtn,signUpbtn,sentOtp,verifyOtpBtn,resendOtpBtn;
++    private Button loginAndsignUpbtn,sentOtp,verifyOtpBtn,resendOtpBtn;
+     private EditText cCode,number,otpText;
+-    private TextView signInWithGoogle;
+     private ConstraintLayout loginAndSignUp,sendOtpLayout,otpVerifyLayout;
+     private PhoneAuthProvider.ForceResendingToken token;
+     private FirebaseAuth fAuth;
+@@ -48,13 +42,10 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_login_signup);
+         getSupportActionBar().hide();
+-
+-        loginBtn = findViewById(R.id.loginBtn);
+-        signUpbtn =findViewById(R.id.SignUpBtn);
++        loginAndsignUpbtn =findViewById(R.id.SignUpLoginBtn);
+         sentOtp = findViewById(R.id.sendOtp);
+         cCode = findViewById(R.id.countryCode);
+         number= findViewById(R.id.phoneNumber);
+-        signInWithGoogle = findViewById(R.id.withGoogle);
+         loginAndSignUp = findViewById(R.id.SignUpLogin);
+         sendOtpLayout = findViewById(R.id.EnterNumberForOtp);
+         otpVerifyLayout = findViewById(R.id.VerifyOtp);
+@@ -64,8 +55,7 @@
+ 
+         fAuth = FirebaseAuth.getInstance();
+ 
+-        loginBtn.setOnClickListener(new View.OnClickListener() {
+-
++        loginAndsignUpbtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 loginAndSignUp.setVisibility(View.GONE);
+@@ -76,16 +66,6 @@
+             }
+         });
+ 
+-        signUpbtn.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                loginAndSignUp.setVisibility(View.GONE);
+-                sendOtpLayout.setVisibility(View.VISIBLE);
+-                otpVerifyLayout.setVisibility(View.GONE);
+-                loginAndSignUp.setVisibility(View.GONE);
+-                sendOtpLayout.setVisibility(View.VISIBLE);
+-            }
+-        });
+ 
+         sentOtp.setOnClickListener(new View.OnClickListener() {
+             @Override
+@@ -107,6 +87,8 @@
+ 
+             }
+         });
++
++
+         resendOtpBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+@@ -114,6 +96,8 @@
+                 resendOtpBtn.setEnabled(false);
+             }
+         });
++
++
+         verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+@@ -126,6 +110,8 @@
+ 
+             }
+         });
++
++
+         callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+             @Override
+             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+@@ -152,6 +138,7 @@
+         };
+ 
+ 
++
+         }
+     public void verifyPhoneNumber(String phoneNumber){
+         PhoneAuthOptions options =
+@@ -165,6 +152,7 @@
+ 
+     }
+ 
++
+     public void authenticateUser(PhoneAuthCredential credential){
+         fAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+             @Override
+@@ -181,16 +169,19 @@
+         });
+ 
+     }
++
++
+     @Override
+     protected void onStart() {
+         super.onStart();
+         if(FirebaseAuth.getInstance().getCurrentUser() !=null)
+         {
+-            startActivity(new Intent(getApplicationContext(),UserProfile.class));
++            startActivity(new Intent(getApplicationContext(),HomePage.class));
+             finish();
+         }
+     }
+ 
++
+     @Override
+     public void onBackPressed() {
+ 
+Index: app/src/main/java/com/example/quickshop/UserProfile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.quickshop;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\npublic class UserProfile extends AppCompatActivity {\r\n    Button logOutbtn,profile;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_user_profile);\r\n        getSupportActionBar().hide();\r\n        logOutbtn = findViewById(R.id.logOut);\r\n        profile= findViewById(R.id.Profile);\r\n        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();\r\n        profile.setText(user.getPhoneNumber());\r\n        logOutbtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                FirebaseAuth.getInstance().signOut();\r\n                startActivity(new Intent(UserProfile.this,LoginSignup.class));\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed() {\r\n        super.onBackPressed();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/quickshop/UserProfile.java	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/java/com/example/quickshop/UserProfile.java	(date 1626084533213)
+@@ -1,31 +1,81 @@
+ package com.example.quickshop;
+ 
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
++import android.text.TextUtils;
+ import android.view.View;
+-import android.widget.Button;
+-
++import android.widget.Toast;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++import com.example.quickshop.databinding.ActivityUserProfileBinding;
++import com.google.gson.internal.$Gson$Preconditions;
++
++import java.util.HashMap;
+ 
+ public class UserProfile extends AppCompatActivity {
+-    Button logOutbtn,profile;
++    private ActivityUserProfileBinding binding;
++    private FirebaseAuth auth;
++    private DatabaseReference dbRef;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_user_profile);
++        binding = ActivityUserProfileBinding.inflate(getLayoutInflater());
++        View view = binding.getRoot();
++        setContentView(view);
+         getSupportActionBar().hide();
+-        logOutbtn = findViewById(R.id.logOut);
+-        profile= findViewById(R.id.Profile);
+         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+-        profile.setText(user.getPhoneNumber());
+-        logOutbtn.setOnClickListener(new View.OnClickListener() {
++        auth = FirebaseAuth.getInstance();
++        binding.userPhone.setText(user.getPhoneNumber());
++
++        binding.saveprofile.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                String name = binding.userName.getText().toString();
++                String email = binding.Emailadd.getText().toString();
++                String  address = binding.Address.getText().toString();
++
++                if(TextUtils.isEmpty(email)){
++                    Toast.makeText(getApplicationContext(),"Please enter your E-mail address",Toast.LENGTH_LONG).show();
++                    return;
++                }
++                if(TextUtils.isEmpty(address)){
++                    Toast.makeText(getApplicationContext(),"Please enter your address",Toast.LENGTH_LONG).show();
++                }
++                if (TextUtils.isEmpty(name)){
++                    Toast.makeText(getApplicationContext(),"Please enter your Name",Toast.LENGTH_LONG).show();
++                }
++
++                else{
++                        dbRef = FirebaseDatabase.getInstance().getReference("Users");
++                    HashMap<String,Object> profile = new HashMap<>();
++                          profile.put("UserName", name);
++                          profile.put("User", user.toString());
++                          profile.put("UserMail", email);
++                          profile.put("UserAdd", address);
++                          dbRef.child("User_Profile").setValue(profile);
++                    Toast.makeText(UserProfile.this, "Profile Updated", Toast.LENGTH_SHORT).show();
++
++                    Intent in =new Intent(UserProfile.this,HomePage.class);
++                      startActivity(in);
++                    finish();
++                }
++            }
++
++        });
++
++        binding.skip.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                FirebaseAuth.getInstance().signOut();
+-                startActivity(new Intent(UserProfile.this,LoginSignup.class));
++                Toast.makeText(UserProfile.this, "Profile Skip", Toast.LENGTH_SHORT).show();
++
++                Intent in =new Intent(UserProfile.this,HomePage.class);
++                startActivity(in);
+                 finish();
+             }
+         });
+Index: app/src/main/res/menu/homepage.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/homepage.xml	(date 1626089442057)
++++ app/src/main/res/menu/homepage.xml	(date 1626089442057)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="utf-8"?>
++<menu xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:android="http://schemas.android.com/apk/res/android">
++    <item
++        android:id="@+id/profile"
++        android:enabled="true"
++        android:icon="@drawable/user"
++        android:title="@string/profile"
++        android:visible="true"
++        app:showAsAction="ifRoom|withText" />
++    <item
++        android:id="@+id/addCart"
++        android:checkable="false"
++        android:enabled="true"
++        android:icon="@drawable/cart"
++        android:menuCategory="system"
++        android:title="@string/cart"
++        android:visible="true"
++        app:showAsAction="always|withText" />
++</menu>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(date 1617176315611)
++++ .idea/vcs.xml	(date 1617176315611)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"RemoteRepositoriesConfiguration\">\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"central\" />\r\n      <option name=\"name\" value=\"Maven Central repository\" />\r\n      <option name=\"url\" value=\"https://repo1.maven.org/maven2\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"jboss.community\" />\r\n      <option name=\"name\" value=\"JBoss Community repository\" />\r\n      <option name=\"url\" value=\"https://repository.jboss.org/nexus/content/repositories/public/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"BintrayJCenter\" />\r\n      <option name=\"name\" value=\"BintrayJCenter\" />\r\n      <option name=\"url\" value=\"https://jcenter.bintray.com/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"Google\" />\r\n      <option name=\"name\" value=\"Google\" />\r\n      <option name=\"url\" value=\"https://dl.google.com/dl/android/maven2/\" />\r\n    </remote-repository>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ .idea/jarRepositories.xml	(date 1626187823244)
+@@ -21,5 +21,10 @@
+       <option name="name" value="Google" />
+       <option name="url" value="https://dl.google.com/dl/android/maven2/" />
+     </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
+   </component>
+ </project>
+\ No newline at end of file
+Index: app/src/main/res/values-night/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values-night/strings.xml	(date 1626043117549)
++++ app/src/main/res/values-night/strings.xml	(date 1626043117549)
+@@ -0,0 +1,4 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string name="profile">Profile</string>
++</resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_login_signup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/all_background\"\r\n    tools:context=\".LoginSignup\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:id=\"@+id/SignUpLogin\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:visibility=\"visible\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\">\r\n\r\n        <Button\r\n            android:id=\"@+id/logo\"\r\n            android:layout_width=\"73dp\"\r\n            android:layout_height=\"71dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginBottom=\"47dp\"\r\n            android:background=\"@drawable/mainlogoround\"\r\n            android:clickable=\"false\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"1000sp\"\r\n            app:layout_constraintBottom_toTopOf=\"@+id/shopHereQuickly\"\r\n            app:layout_constraintStart_toStartOf=\"parent\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/shopHereQuickly\"\r\n            android:layout_width=\"245dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:layout_marginBottom=\"105dp\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:shadowColor=\"#989494\"\r\n            android:text=\"Shop Here \\nQuickly\"\r\n            android:textAlignment=\"gravity\"\r\n            android:textColor=\"#000000\"\r\n            android:textSize=\"40sp\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintBottom_toTopOf=\"@+id/SignUpBtn\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintHorizontal_bias=\"0.0\"\r\n            app:layout_constraintStart_toStartOf=\"parent\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/SignUpBtn\"\r\n            android:layout_width=\"161dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginEnd=\"15dp\"\r\n            android:layout_marginBottom=\"24dp\"\r\n            android:background=\"@drawable/sgbase\"\r\n            android:backgroundTint=\"#000000\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"SignUp\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"8sp\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/loginBtn\"\r\n            app:layout_constraintStart_toStartOf=\"parent\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/loginBtn\"\r\n            android:layout_width=\"161dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginStart=\"15dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:layout_marginBottom=\"24dp\"\r\n            android:background=\"@drawable/lgbase\"\r\n            android:backgroundTint=\"#FFFFFF\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"Login\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"#000000\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"8sp\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/SignUpBtn\" />\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:id=\"@+id/EnterNumberForOtp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:visibility=\"gone\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <Button\r\n            android:id=\"@+id/logoinenterNum\"\r\n            android:layout_width=\"73dp\"\r\n            android:layout_height=\"71dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"25dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:background=\"@drawable/mainlogoround\"\r\n            android:clickable=\"false\"\r\n            android:shadowColor=\"#000000\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textSize=\"22sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"1000sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintHorizontal_bias=\"0.451\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"44dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"Welcome. \\n Verify phone number?\"\r\n            android:textAlignment=\"center\"\r\n            android:textColor=\"#E1000000\"\r\n            android:textColorHighlight=\"#000000\"\r\n            android:textColorHint=\"#000000\"\r\n            android:textColorLink=\"#000000\"\r\n            android:textSize=\"22dp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/logoinenterNum\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/countryCode\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"52dp\"\r\n            android:backgroundTint=\"#000000\"\r\n            android:ems=\"3\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:hint=\"+91\"\r\n            android:inputType=\"phone\"\r\n            android:letterSpacing=\"0.3\"\r\n            android:textAlignment=\"center\"\r\n            android:textColor=\"#000000\"\r\n            android:textColorHint=\"#B7777373\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/phoneNumber\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/phoneNumber\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"52dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:backgroundTint=\"#000000\"\r\n            android:ems=\"10\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:hint=\"93456789010\"\r\n            android:inputType=\"phone\"\r\n            android:letterSpacing=\"0.3\"\r\n            android:textAlignment=\"center\"\r\n            android:textColor=\"#000000\"\r\n            android:textColorHint=\"#B7777373\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/countryCode\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/textView\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/sendOtp\"\r\n            android:layout_width=\"161dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:background=\"@drawable/sgbase\"\r\n            android:backgroundTint=\"#000000\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"Continue\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"8sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/withGoogle\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/withGoogle\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"100dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:text=\"Continue With Google ->\"\r\n            android:textColor=\"#000000\"\r\n            android:textColorHint=\"#000000\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/phoneNumber\" />\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:id=\"@+id/VerifyOtp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:visibility=\"gone\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <Button\r\n            android:id=\"@+id/logootp\"\r\n            android:layout_width=\"73dp\"\r\n            android:layout_height=\"71dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"25dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:background=\"@drawable/mainlogoround\"\r\n            android:clickable=\"false\"\r\n            android:shadowColor=\"#000000\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textSize=\"22sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"1000sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/enterOtphere\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"95dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:letterSpacing=\"0.4\"\r\n            android:text=\"Enter Your Otp\"\r\n            android:textColor=\"#000000\"\r\n            android:textSize=\"18dp\"\r\n            android:textStyle=\"normal\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/logootp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/otpText\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:background=\"@android:color/transparent\"\r\n            android:ems=\"6\"\r\n            android:fontFamily=\"@font/arbutus\"\r\n            android:hint=\"******\"\r\n            android:inputType=\"number\"\r\n            android:letterSpacing=\"0.3\"\r\n            android:textAlignment=\"center\"\r\n            android:textColor=\"#000000\"\r\n            android:textColorHint=\"#D8535050\"\r\n            android:textSize=\"25dp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintHorizontal_bias=\"0.496\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/enterOtphere\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/vrifyOtp\"\r\n            android:layout_width=\"161dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:background=\"@drawable/sgbase\"\r\n            android:backgroundTint=\"#000000\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"Verify Otp\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"8sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/otpText\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/resend\"\r\n            android:layout_width=\"161dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginStart=\"30dp\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:layout_marginEnd=\"30dp\"\r\n            android:background=\"@android:color/transparent\"\r\n            android:fontFamily=\"@font/archivo_black\"\r\n            android:text=\"Resend Otp\"\r\n            android:textAlignment=\"center\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textSize=\"19sp\"\r\n            android:textStyle=\"bold\"\r\n            app:cornerRadius=\"8sp\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/vrifyOtp\" />\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_login_signup.xml	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/res/layout/activity_login_signup.xml	(date 1626035489384)
+@@ -18,10 +18,10 @@
+ 
+         <Button
+             android:id="@+id/logo"
+-            android:layout_width="73dp"
+-            android:layout_height="71dp"
++            android:layout_width="72dp"
++            android:layout_height="72dp"
+             android:layout_marginStart="30dp"
+-            android:layout_marginBottom="47dp"
++            android:layout_marginBottom="24dp"
+             android:background="@drawable/mainlogoround"
+             android:clickable="false"
+             android:textAlignment="center"
+@@ -30,15 +30,18 @@
+             android:textStyle="bold"
+             app:cornerRadius="1000sp"
+             app:layout_constraintBottom_toTopOf="@+id/shopHereQuickly"
+-            app:layout_constraintStart_toStartOf="parent" />
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.0"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toTopOf="parent"
++            app:layout_constraintVertical_bias="1.0" />
+ 
+         <TextView
+             android:id="@+id/shopHereQuickly"
+-            android:layout_width="245dp"
+-            android:layout_height="wrap_content"
++            android:layout_width="wrap_content"
++            android:layout_height="106dp"
+             android:layout_marginStart="30dp"
+-            android:layout_marginEnd="30dp"
+-            android:layout_marginBottom="105dp"
++            android:layout_marginBottom="48dp"
+             android:fontFamily="@font/archivo_black"
+             android:shadowColor="#989494"
+             android:text="Shop Here \nQuickly"
+@@ -46,52 +49,33 @@
+             android:textColor="#000000"
+             android:textSize="40sp"
+             android:textStyle="bold"
+-            app:layout_constraintBottom_toTopOf="@+id/SignUpBtn"
++            app:layout_constraintBottom_toTopOf="@+id/SignUpLoginBtn"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintStart_toStartOf="parent" />
+ 
+         <Button
+-            android:id="@+id/SignUpBtn"
+-            android:layout_width="161dp"
+-            android:layout_height="50dp"
++            android:id="@+id/SignUpLoginBtn"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
+             android:layout_marginStart="30dp"
+-            android:layout_marginEnd="15dp"
+-            android:layout_marginBottom="24dp"
++            android:layout_marginEnd="30dp"
++            android:layout_marginBottom="32dp"
+             android:background="@drawable/sgbase"
+             android:backgroundTint="#000000"
+             android:fontFamily="@font/archivo_black"
+-            android:text="SignUp"
++            android:text="SignUp/Login"
+             android:textAlignment="center"
+             android:textAllCaps="false"
+             android:textColor="#FFFFFF"
+-            android:textSize="19sp"
++            android:textSize="15sp"
+             android:textStyle="bold"
+             app:cornerRadius="8sp"
+             app:layout_constraintBottom_toBottomOf="parent"
+-            app:layout_constraintEnd_toStartOf="@+id/loginBtn"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintStart_toStartOf="parent" />
+ 
+-        <Button
+-            android:id="@+id/loginBtn"
+-            android:layout_width="161dp"
+-            android:layout_height="50dp"
+-            android:layout_marginStart="15dp"
+-            android:layout_marginEnd="30dp"
+-            android:layout_marginBottom="24dp"
+-            android:background="@drawable/lgbase"
+-            android:backgroundTint="#FFFFFF"
+-            android:fontFamily="@font/archivo_black"
+-            android:text="Login"
+-            android:textAlignment="center"
+-            android:textAllCaps="false"
+-            android:textColor="#000000"
+-            android:textSize="19sp"
+-            android:textStyle="bold"
+-            app:cornerRadius="8sp"
+-            app:layout_constraintBottom_toBottomOf="parent"
+-            app:layout_constraintEnd_toEndOf="parent"
+-            app:layout_constraintStart_toEndOf="@+id/SignUpBtn" />
+     </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout
+@@ -119,15 +103,17 @@
+             android:textSize="22sp"
+             android:textStyle="bold"
+             app:cornerRadius="1000sp"
++            app:layout_constraintBottom_toTopOf="@+id/textView"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintHorizontal_bias="0.451"
+             app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintTop_toTopOf="parent" />
++            app:layout_constraintTop_toTopOf="parent"
++            app:layout_constraintVertical_bias="0.59000003" />
+ 
+         <TextView
+             android:id="@+id/textView"
+             android:layout_width="wrap_content"
+-            android:layout_height="0dp"
++            android:layout_height="wrap_content"
+             android:layout_marginStart="30dp"
+             android:layout_marginTop="44dp"
+             android:layout_marginEnd="30dp"
+@@ -139,6 +125,7 @@
+             android:textColorHint="#000000"
+             android:textColorLink="#000000"
+             android:textSize="22dp"
++            app:layout_constraintBottom_toTopOf="@+id/countryCode"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/logoinenterNum" />
+@@ -159,7 +146,9 @@
+             android:textColor="#000000"
+             android:textColorHint="#B7777373"
+             android:textStyle="bold"
++            app:layout_constraintBottom_toTopOf="@+id/sendOtp"
+             app:layout_constraintEnd_toStartOf="@+id/phoneNumber"
++            app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView" />
+ 
+@@ -179,15 +168,18 @@
+             android:textColor="#000000"
+             android:textColorHint="#B7777373"
+             android:textStyle="bold"
++            app:layout_constraintBottom_toTopOf="@+id/sendOtp"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toEndOf="@+id/countryCode"
+             app:layout_constraintTop_toBottomOf="@+id/textView" />
+ 
+         <Button
+             android:id="@+id/sendOtp"
+-            android:layout_width="161dp"
+-            android:layout_height="50dp"
+-            android:layout_marginTop="20dp"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="32dp"
++            android:layout_marginEnd="32dp"
++            android:layout_marginBottom="24dp"
+             android:background="@drawable/sgbase"
+             android:backgroundTint="#000000"
+             android:fontFamily="@font/archivo_black"
+@@ -198,24 +190,11 @@
+             android:textSize="19sp"
+             android:textStyle="bold"
+             app:cornerRadius="8sp"
++            app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintTop_toBottomOf="@+id/withGoogle" />
+-
+-        <TextView
+-            android:id="@+id/withGoogle"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_marginStart="30dp"
+-            android:layout_marginTop="100dp"
+-            android:layout_marginEnd="30dp"
+-            android:text="Continue With Google ->"
+-            android:textColor="#000000"
+-            android:textColorHint="#000000"
+-            android:textStyle="bold"
+-            app:layout_constraintEnd_toEndOf="parent"
+-            app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
++            app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
++            app:layout_constraintVertical_bias="1.0" />
+ 
+     </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.quickshop\">\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/logo\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/logo\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.QuickShop\">\r\n        <activity android:name=\".UserProfile\"></activity>\r\n        <activity\r\n            android:name=\".LoginSignup\"\r\n            android:label=\"Login And SignUp Page\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:label=\"Quick Shop\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 50bb2a69df3e7975c962a89cbe1c9219717b7b16)
++++ app/src/main/AndroidManifest.xml	(date 1626177228477)
+@@ -1,6 +1,9 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     package="com.example.quickshop">
++
++    <uses-permission android:name="android.permission.INTERNET" />
++
+     <application
+         android:allowBackup="true"
+         android:icon="@mipmap/logo"
+@@ -8,7 +11,11 @@
+         android:roundIcon="@mipmap/logo"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.QuickShop">
+-        <activity android:name=".UserProfile"></activity>
++        <activity android:name=".PaymentPanel"/>
++        <activity android:name=".ProductView" />
++        <activity android:name=".addToCart" />
++        <activity android:name=".HomePage" />
++        <activity android:name=".UserProfile" />
+         <activity
+             android:name=".LoginSignup"
+             android:label="Login And SignUp Page" />
+diff --git app/src/main/res/drawable/mainlogoround.xml app/src/main/res/drawable-v24/mainlogoround.xml
+rename from app/src/main/res/drawable/mainlogoround.xml
+rename to app/src/main/res/drawable-v24/mainlogoround.xml

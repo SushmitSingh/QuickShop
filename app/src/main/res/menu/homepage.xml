@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="@string/profile"
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/addCart"
+        android:checkable="false"
+        android:enabled="true"
+        android:icon="@drawable/cart"
+        android:menuCategory="system"
+        android:title="@string/cart"
+        android:visible="true"
+        app:showAsAction="always|withText" />
+</menu>
